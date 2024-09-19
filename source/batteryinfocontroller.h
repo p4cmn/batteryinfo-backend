@@ -16,6 +16,17 @@ private:
 public:
   explicit BatteryInfoController(BatteryInfoModel *sourceModel, BatteryInfoService *sourceService, QObject *parent = nullptr);
 
+  int getChargeLevelFromModel() const;
+  double getVoltageFromModel() const;
+  double getDesignMaxCapacityFromModel() const;
+  double getCurrentMaxCapacityFromModel() const;
+  PowerMode getPowerModeFromModel() const;
+  QTime getDischargeTimeFromModel() const;
+  BatteryType getBatteryTypeFromModel() const;
+  BatteryHealth getBatteryHealthFromModel() const;
+  QTime getRemainingBatteryLifetimeFromModel() const;
+  PowerSupplyType getPowerSupplyTypeFromModel() const;
+
 private slots:
   void handleBatteryChargeLevelChange(int level);
   void handlePowerModeChange(PowerMode powerMode);

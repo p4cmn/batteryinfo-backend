@@ -15,6 +15,47 @@ BatteryInfoController::BatteryInfoController(BatteryInfoModel *sourceModel, Batt
   connect(service, &BatteryInfoService::batteryHealthChanged, this, &BatteryInfoController::handleBatteryHealthChange);
 }
 
+int BatteryInfoController::getChargeLevelFromModel() const {
+  return model->getChargeLevel();
+}
+
+double BatteryInfoController::getVoltageFromModel() const {
+  return model->getVoltage();
+}
+
+double BatteryInfoController::getDesignMaxCapacityFromModel() const {
+  return model->getDesignMaxCapacity();
+}
+
+double BatteryInfoController::getCurrentMaxCapacityFromModel() const {
+  return model->getCurrentMaxCapacity();
+}
+
+PowerMode BatteryInfoController::getPowerModeFromModel() const {
+  return model->getPowerMode();
+}
+
+QTime BatteryInfoController::getDischargeTimeFromModel() const {
+  return model->getDischargeTime();
+}
+
+BatteryType BatteryInfoController::getBatteryTypeFromModel() const {
+  return model->getBatteryType();
+}
+
+BatteryHealth BatteryInfoController::getBatteryHealthFromModel() const {
+  return model->getBatteryHealth();
+}
+
+QTime BatteryInfoController::getRemainingBatteryLifetimeFromModel() const {
+  return model->getRemainingBatteryLifetime();
+}
+
+PowerSupplyType BatteryInfoController::getPowerSupplyTypeFromModel() const {
+  return model->getPowerSupplyType();
+}
+
+
 void BatteryInfoController::handleBatteryChargeLevelChange(int level) {
   model->setChargeLevel(level);
 }

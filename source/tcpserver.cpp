@@ -1,6 +1,7 @@
 #include "tcpserver.h"
 
-TCPServer::TCPServer(QObject *parent): QObject(parent) {}
+TCPServer::TCPServer(BatteryInfoController *batteryCtrl, PowerManagementController *powerCtrl, QObject *parent)
+    : QTcpServer(parent), batteryController(batteryCtrl), powerController(powerCtrl) {}
 
 bool TCPServer::startServer(const QHostAddress &address, quint16 port) {
   if(this->listen(address, port)) {
@@ -33,12 +34,52 @@ void TCPServer::incomingConnection(qintptr socketDescriptor) {
 void TCPServer::handleClientRequest() {
   QByteArray requestData = clientSocket->readAll();
   qDebug() << "Data received from the client: " << requestData;
-  QString response = "Server Response: Data received";
-  clientSocket->write(response.toUtf8()); // Отправляем ответ клиенту
-  clientSocket->flush();
+
+  processRequest(requestData);
 }
 
 void TCPServer::onClientDisconnected() {
   qDebug() << "The client has disconnected";
   clientSocket->deleteLater();
+}
+
+void TCPServer::processRequest(const QByteArray &data) {
+  QJsonParseError jsonError;
+  QJsonDocument jsonDoc = QJsonDocument::fromJson(data, &jsonError);
+
+  if (jsonError.error != QJsonParseError::NoError) {
+    qDebug() << "JSON parsing error:" << jsonError.errorString();
+    return;
+  }
+
+  if (!jsonDoc.isObject()) {
+    qDebug() << "Invalid JSON format";
+    return;
+  }
+
+  QJsonObject jsonObj = jsonDoc.object();
+  QString action = jsonObj["action"].toString();
+
+  if (action == "getBatteryInfo") {
+    QJsonObject response;
+    response["chargeLevel"] = batteryController->getChargeLevelFromModel();
+    response["voltage"] = batteryController->getVoltageFromModel();
+    response["maxCapacity"] = batteryController->getDesignMaxCapacityFromModel();
+    response["currentCapacity"] = batteryController->getCurrentCapacityFromModel();
+    response["powerMode"] = static_cast<int>(batteryController->getPowerModeFromModel());
+    response["dischargeTime"] = batteryController->getDischargeTimeFromModel().toString();
+    response["batteryType"] = static_cast<int>(batteryController->getBatteryTypeFromModel());
+    response["batteryHealth"] = static_cast<int>(batteryController->getBatteryHealthFromModel());
+    response["remainingBatteryLifetime"] = batteryController->getRemainingBatteryLifetimeFromModel().toString();
+    response["powerSupplyType"] = static_cast<int>(batteryController->getPowerSupplyTypeFromModel());
+
+    QJsonDocument responseDoc(response);
+    clientSocket->write(responseDoc.toJson());
+  } else if (action == "sleep") {
+    powerController->handleSleepRequest();
+  } else if (action == "hibernate") {
+    powerController->handleHibernateRequest();
+  } else {
+    qDebug() << "Unknown command";
+  }
 }
