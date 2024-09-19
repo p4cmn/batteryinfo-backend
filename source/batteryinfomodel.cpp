@@ -53,6 +53,14 @@ void BatteryInfoModel::updateValue(T &member, const T &value, void (BatteryInfoM
   }
 }
 
+template <typename T>
+void BatteryInfoModel::updateValue(T &member, const T &value, void (BatteryInfoModel::*signal)(const T&)) {
+  if (member != value) {
+    member = value;
+    emit (this->*signal)(value);
+  }
+}
+
 void BatteryInfoModel::setVoltage(double voltage) {
   updateValue(this->voltage, voltage, &BatteryInfoModel::voltageChanged);
 }
@@ -77,7 +85,7 @@ void BatteryInfoModel::setDischargeTime(const QTime& time) {
   updateValue(this->dischargeTime, time, &BatteryInfoModel::dischargeTimeChanged);
 }
 
-void BatteryInfoModel::setCurrentCapacity(double capacity) {
+void BatteryInfoModel::setCurrentMaxCapacity(double capacity) {
   updateValue(this->currentMaxCapacity, capacity, &BatteryInfoModel::currentMaxCapacityChanged);
 }
 

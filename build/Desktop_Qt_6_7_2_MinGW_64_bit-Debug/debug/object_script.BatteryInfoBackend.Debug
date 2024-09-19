@@ -1,0 +1,13 @@
+debug/batteryinfocontroller.o
+debug/batteryinfomodel.o
+debug/batteryinfoservice.o
+debug/main.o
+debug/powermanagementcontroller.o
+debug/powermanagementservice.o
+debug/tcpserver.o
+debug/moc_batteryinfocontroller.o
+debug/moc_batteryinfomodel.o
+debug/moc_batteryinfoservice.o
+debug/moc_powermanagementcontroller.o
+debug/moc_powermanagementservice.o
+debug/moc_tcpserver.o

@@ -2,8 +2,6 @@
 #include <windows.h>
 #include <powrprof.h>
 
-#pragma comment(lib, "PowrProf.lib")
-
 PowerManagementService::PowerManagementService(QObject *parent)
     : QObject(parent) {}
 

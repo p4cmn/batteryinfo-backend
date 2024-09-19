@@ -26,6 +26,9 @@ private:
   template <typename T>
   void updateValue(T &member, const T &value, void (BatteryInfoModel::*signal)(T));
 
+  template <typename T>
+  void updateValue(T &member, const T &value, void (BatteryInfoModel::*signal)(const T&));
+
 public:
   explicit BatteryInfoModel(QObject* parent = nullptr);
 

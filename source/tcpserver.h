@@ -17,19 +17,19 @@ private:
 
 public:
   explicit TCPServer(BatteryInfoController *batteryCtrl, PowerManagementController *powerCtrl, QObject *parent = nullptr);
-  bool startServer(const QHostAddress &address = QHostAddress::LocalHost, quint16 port = 8089);
+  bool startServer(const QHostAddress &address = QHostAddress::LocalHost, quint16 port = 33334);
   void stopServer();
 
 protected:
   void incomingConnection(qintptr socketDescriptor) override;
 
 private slots:
-  void handleClientRequest();  // Обработка запроса от клиента
-  void onClientDisconnected(); // Обработка отключения клиента
+  void handleClientRequest();
+  void onClientDisconnected();
 
 private:
-  QTcpSocket *clientSocket;    // Сокет для подключения клиента
-  void processRequest(const QByteArray &data); // Обработка JSON запроса
+  QTcpSocket *clientSocket;
+  void processRequest(const QByteArray &data);
 };
 
 #endif // TCPSERVER_H

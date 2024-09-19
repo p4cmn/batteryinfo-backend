@@ -1,10 +1,11 @@
 #include "tcpserver.h"
+#include <QDebug>
 
 TCPServer::TCPServer(BatteryInfoController *batteryCtrl, PowerManagementController *powerCtrl, QObject *parent)
     : QTcpServer(parent), batteryController(batteryCtrl), powerController(powerCtrl) {}
 
 bool TCPServer::startServer(const QHostAddress &address, quint16 port) {
-  if(this->listen(address, port)) {
+  if(!this->listen(address, port)) {
     qDebug() << "Failed to start server";
     return false;
   }
@@ -15,7 +16,7 @@ bool TCPServer::startServer(const QHostAddress &address, quint16 port) {
 void TCPServer::stopServer() {
   if(this->isListening()) {
     this->close();
-    QDebug() << "The server has stopped";
+    qDebug() << "The server has stopped";
   }
 }
 
@@ -65,7 +66,7 @@ void TCPServer::processRequest(const QByteArray &data) {
     response["chargeLevel"] = batteryController->getChargeLevelFromModel();
     response["voltage"] = batteryController->getVoltageFromModel();
     response["maxCapacity"] = batteryController->getDesignMaxCapacityFromModel();
-    response["currentCapacity"] = batteryController->getCurrentCapacityFromModel();
+    response["currentCapacity"] = batteryController->getCurrentMaxCapacityFromModel();
     response["powerMode"] = static_cast<int>(batteryController->getPowerModeFromModel());
     response["dischargeTime"] = batteryController->getDischargeTimeFromModel().toString();
     response["batteryType"] = static_cast<int>(batteryController->getBatteryTypeFromModel());

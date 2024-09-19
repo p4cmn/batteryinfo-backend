@@ -1,0 +1,13 @@
+release/batteryinfocontroller.o
+release/batteryinfomodel.o
+release/batteryinfoservice.o
+release/main.o
+release/powermanagementcontroller.o
+release/powermanagementservice.o
+release/tcpserver.o
+release/moc_batteryinfocontroller.o
+release/moc_batteryinfomodel.o
+release/moc_batteryinfoservice.o
+release/moc_powermanagementcontroller.o
+release/moc_powermanagementservice.o
+release/moc_tcpserver.o
